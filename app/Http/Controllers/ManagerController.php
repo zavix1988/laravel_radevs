@@ -19,8 +19,7 @@ class ManagerController extends Controller
     {
         $managers = User::role('manager')->get();
         $managers = ManagerResource::collection($managers)->resolve();
-        dd($managers);
-        return Inertia::render('Managers/List');
+        return Inertia::render('Managers/List', compact('managers'));
     }
 
     /**
@@ -77,8 +76,11 @@ class ManagerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(int $id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('managers.index');
     }
 }

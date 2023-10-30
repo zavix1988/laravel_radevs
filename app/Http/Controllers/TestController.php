@@ -3,18 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TestRequest;
+use App\Http\Resources\ManagerResource;
 use App\Models\Test;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class TestController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        return Inertia::render('Tests/List');
+        $managers = User::role('manager')->get();
+        $managers = ManagerResource::collection($managers)->resolve();
+        $tests = Test::all();
+        return Inertia::render('Tests/List', compact('managers' ));
     }
 
     /**

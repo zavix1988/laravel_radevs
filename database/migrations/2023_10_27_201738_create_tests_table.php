@@ -21,7 +21,12 @@ return new class extends Migration
             $table->bigInteger('manager_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('manager_id')->references('id')->on('users');        });
+            $table->foreign('manager_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('CASCADE')
+                ->onUpdate('CASCADE');
+        });
     }
 
     /**

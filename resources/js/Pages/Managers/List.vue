@@ -1,8 +1,22 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Head} from "@inertiajs/vue3";
+import {Head, useForm} from "@inertiajs/vue3";
 import AddManagerForm from "@/Pages/Managers/Partials/AddManagerForm.vue";
-// import DeleteUserForm from "@/Pages/Profile/Partials/DeleteUserForm.vue";
+import ManagerListItem from "@/Pages/Managers/Partials/ManagersListItem/ManagerListItem.vue";
+
+defineProps({
+    managers: {
+        type: Array,
+    },
+});
+
+const form = useForm({
+    password: '',
+});
+
+const deleteManager = (id) => {
+    form.delete(route('managers.destroy', id))
+}
 
 </script>
 
@@ -31,16 +45,15 @@ import AddManagerForm from "@/Pages/Managers/Partials/AddManagerForm.vue";
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">John Doe</td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">test@test.loc</td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">Manager</td>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              <a href="#" class="text-indigo-600 hover:text-indigo-900 mr-2"><i class="fa-solid fa-edit"></i></a>
-              <a href="#" class="text-red-600 hover:text-red-900"><i class="fa-solid fa-trash"></i></a>
-            </td>
+          <tr
+              v-for="manager in managers"
+              :key="manager.id"
+          >
+              <ManagerListItem
+                  :manager="manager"
+                  @onDeleteItem="deleteManager(manager.id)"
+              />
           </tr>
-          <!-- Додайте інші рядки даних аналогічно -->
           </tbody>
         </table>
       </div>
